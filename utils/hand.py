@@ -39,62 +39,62 @@ class HandUtils:
         all_hands_landmarks = self._get_landmarks(imgRGB)
 
         if all_hands_landmarks:
-            primary_hand_landmarks = all_hands_landmarks[0].landmark
+            for multi_hand_landmark in all_hands_landmarks:
+                primary_hand_landmarks = multi_hand_landmark.landmark
+                # --- Use actual image dimensions for scaling ---
+                self.finger_tips = [
+                    self._calculate_scaled_coords(primary_hand_landmarks[tip_idx], img_width, img_height)
+                    for tip_idx in self._FINGERTIP_LANDMARKS
+                ]
 
-            # --- Use actual image dimensions for scaling ---
-            self.finger_tips = [
-                self._calculate_scaled_coords(primary_hand_landmarks[tip_idx], img_width, img_height)
-                for tip_idx in self._FINGERTIP_LANDMARKS
-            ]
+                # --- Use actual image dimensions for scaling ---
+                wrist_coord = self._calculate_scaled_coords(primary_hand_landmarks[0], img_width, img_height)
+                middle_mcp_coord = self._calculate_scaled_coords(primary_hand_landmarks[9], img_width, img_height)
 
-            # --- Use actual image dimensions for scaling ---
-            wrist_coord = self._calculate_scaled_coords(primary_hand_landmarks[0], img_width, img_height)
-            middle_mcp_coord = self._calculate_scaled_coords(primary_hand_landmarks[9], img_width, img_height)
+                self.palm_centre = (
+                    (wrist_coord[0] + middle_mcp_coord[0]) // 2,
+                    (wrist_coord[1] + middle_mcp_coord[1]) // 2
+                )
 
-            self.palm_centre = (
-                (wrist_coord[0] + middle_mcp_coord[0]) // 2,
-                (wrist_coord[1] + middle_mcp_coord[1]) // 2
-            )
+                fingertip_distances = [
+                    calculate_distance(tip_coord, self.palm_centre)
+                    for tip_coord in self.finger_tips
+                ]
 
-            fingertip_distances = [
-                calculate_distance(tip_coord, self.palm_centre)
-                for tip_coord in self.finger_tips
-            ]
+                self.avg_palm_radius = calculate_distance(wrist_coord, middle_mcp_coord) * 1.2
 
-            self.avg_palm_radius = calculate_distance(wrist_coord, middle_mcp_coord) * 1.2
+                if draw_img is not None:
+                    # Ensure draw_img has the same dimensions as imgRGB for circles to align perfectly
+                    # If draw_img is a different size, mpDraw will scale to it, but cv.circles might seem off.
+                    draw_height, draw_width, _ = draw_img.shape
+                    if draw_width != img_width or draw_height != img_height:
+                        # Optional: Add a warning or resize draw_img if needed
+                        print("Warning: draw_img dimensions differ from imgRGB. Manual drawings might not align perfectly with mpDraw.")
 
-            if draw_img is not None:
-                # Ensure draw_img has the same dimensions as imgRGB for circles to align perfectly
-                # If draw_img is a different size, mpDraw will scale to it, but cv.circles might seem off.
-                draw_height, draw_width, _ = draw_img.shape
-                if draw_width != img_width or draw_height != img_height:
-                    # Optional: Add a warning or resize draw_img if needed
-                    print("Warning: draw_img dimensions differ from imgRGB. Manual drawings might not align perfectly with mpDraw.")
+                    # mpDraw scales internally based on draw_img dimensions
+                    self.drawing_utils.draw_landmarks(draw_img, all_hands_landmarks[0], mp.solutions.hands.HAND_CONNECTIONS)
 
-                # mpDraw scales internally based on draw_img dimensions
-                self.drawing_utils.draw_landmarks(draw_img, all_hands_landmarks[0], mp.solutions.hands.HAND_CONNECTIONS)
-
-                # cv.circle uses coordinates scaled based on imgRGB dimensions
-                cv.circle(draw_img, wrist_coord, 5, (0, 255, 0), -1)
-                cv.circle(draw_img, middle_mcp_coord, 5, (0, 0, 255), -1)
-                cv.circle(draw_img, self.palm_centre, 7, (255, 0, 0), -1)
+                    # cv.circle uses coordinates scaled based on imgRGB dimensions
+                    cv.circle(draw_img, wrist_coord, 5, (0, 255, 0), -1)
+                    cv.circle(draw_img, middle_mcp_coord, 5, (0, 0, 255), -1)
+                    cv.circle(draw_img, self.palm_centre, 7, (255, 0, 0), -1)
 
 
-            all_fingers_close = all(dist < self.avg_palm_radius for dist in fingertip_distances)
+                all_fingers_close = all(dist < self.avg_palm_radius for dist in fingertip_distances)
 
-            thumb_to_index_dist = calculate_distance(
-                self.finger_tips[self.HANDS["THUMB"]],
-                self.finger_tips[self.HANDS["INDEX"]]
-            )
-            thumb_near_index_and_others_close = (
-                thumb_to_index_dist < 50 and
-                fingertip_distances[self.HANDS["INDEX"]] < self.avg_palm_radius and
-                fingertip_distances[self.HANDS["MIDDLE"]] < self.avg_palm_radius and
-                fingertip_distances[self.HANDS["RING"]] < self.avg_palm_radius
-            )
+                thumb_to_index_dist = calculate_distance(
+                    self.finger_tips[self.HANDS["THUMB"]],
+                    self.finger_tips[self.HANDS["INDEX"]]
+                )
+                thumb_near_index_and_others_close = (
+                    thumb_to_index_dist < 50 and
+                    fingertip_distances[self.HANDS["INDEX"]] < self.avg_palm_radius and
+                    fingertip_distances[self.HANDS["MIDDLE"]] < self.avg_palm_radius and
+                    fingertip_distances[self.HANDS["RING"]] < self.avg_palm_radius
+                )
 
-            is_closed = all_fingers_close or thumb_near_index_and_others_close
-            return is_closed
+                is_closed = all_fingers_close or thumb_near_index_and_others_close
+                return is_closed
 
         else:
             self.avg_palm_radius = 0

@@ -1,4 +1,5 @@
 import utils.sceneValues
+from save_load import save_game
 from utils.UI.button import Button
 from utils.colours import *
 from globals import hand_utils, width, height
@@ -11,12 +12,15 @@ class MainScene:
         """
         This scene has 2 buttons, one to start, and one to quit. the draw function draws both of them and the update function calls update on the buttons, which in turn checks for the cursor hovering or clicking and also the update function updates the coords of the hands class
         """
-        self.startBtn: Button = Button(width // 2, height // 2 - 90, 200, 100, blue, "START")
-        self.quitBtn: Button = Button(width // 2, height // 2 + 90, 200, 100, red, "QUIT")
+        self.startBtn: Button = Button(width // 2, height // 2 - 120, 200, 100, blue, "START")
+        self.saveBtn: Button = Button(width // 2, height // 2, 200, 100, green, "SAVE GAME")
+        self.quitBtn: Button = Button(width // 2, height // 2 + 120, 200, 100, red, "QUIT")
 
-        self.BUTTONS = (self.startBtn, self.quitBtn)
+        self.BUTTONS = (self.startBtn, self.saveBtn, self.quitBtn)
         self.init_time = time.time()
         self.init_timer_lim = 1
+        self.save_message = ""
+        self.save_message_time = 0
 
     def draw(self, img) -> None:
         for btn in self.BUTTONS:
@@ -41,6 +45,11 @@ class MainScene:
             cv.putText(img, f"Starting in {seconds_left}...",
                        (width // 2 - 150, height // 2),
                        cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+        # Show save message if active
+        if time.time() - self.save_message_time < 2 and self.save_message:
+            cv.putText(img, self.save_message,
+                       (width // 2 - 100, height - 50),
+                       cv.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
     def re_init(self):
         self.init_time = time.time()
@@ -59,6 +68,11 @@ class MainScene:
 
             if self.startBtn.clicked:
                 return utils.sceneValues.FOTM_Scene
+
+            if self.saveBtn.clicked:
+                save_game()
+                self.save_message = "GAME SAVED"
+                self.save_message_time = time.time()
 
         return utils.sceneValues.main_scene
 

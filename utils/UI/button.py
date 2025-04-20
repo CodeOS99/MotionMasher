@@ -31,7 +31,7 @@ class Button:
 
         self.col = self.init_col
 
-        self.hover_radius = 40  # radius of palm detection circle
+        self.hover_radius = 10  # radius of palm detection circle
 
         self.text = text
 
@@ -72,3 +72,6 @@ class Button:
             self.clicked = True
         else:
             self.clicked = False
+
+    def hovered(self, frameRGB):
+        return self.col == self.hover_col

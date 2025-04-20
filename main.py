@@ -1,6 +1,7 @@
 import cv2 as cv
 
 from scenes.FightOrTrainMenuScene import FightOrTrainMenuScene
+from scenes.ShopScene import ShopScene
 from scenes.main_scene import MainScene
 from scenes.FightOrTrainMenuScene import FightOrTrainMenuScene
 from scenes.FightScene import FightScene
@@ -13,7 +14,7 @@ cap.set(cv.CAP_PROP_FRAME_WIDTH, width)
 cap.set(cv.CAP_PROP_FRAME_HEIGHT, height)
 
 # To add a new scene, add it here and also add it in the scene value place so that scenes don't break
-all_scenes = [MainScene(), FightOrTrainMenuScene(), FightScene()]
+all_scenes = [MainScene(), FightOrTrainMenuScene(), FightScene(), ShopScene()]
 curr_scene_idx = 0
 
 while True:

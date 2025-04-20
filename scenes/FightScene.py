@@ -4,7 +4,7 @@ from numpy.ma.core import floor
 import playerStats
 import utils.sceneValues
 from circleEnemy import CircleEnemy
-from globals import hand_utils, width, height, mpDraw
+from globals import hand_utils, width, height
 from utils.UI.button import Button
 from utils.counter import Counter
 import cv2 as cv
@@ -32,9 +32,6 @@ class FightScene:
         self.enemies_spawned = 0
         self.difficulty_level = 1
         self.score = 0
-
-        self.rendered_for_first_time = True
-
     def draw(self, img):
         _overlay = img.copy()
         overlay_height = int(floor(self.total_enemy_power / playerStats.max_enemy_power * height))
@@ -60,10 +57,20 @@ class FightScene:
             cv.putText(img, "GAME OVER!", (width // 2 - 100, height // 2), cv.FONT_HERSHEY_PLAIN, 7, (0, 0, 0), 2)
             self.backButton.draw(img)
 
+    def re_init(self):
+        self.circles = []
+        self.total_enemy_power = 0
+        self.game_duration = 0
+        self.start_time = time.time()
+        self.enemies_spawned = 0
+        self.difficulty_level = 1
+        self.score = 0
+        self.counters = {
+            "circle_spawner": Counter(0),
+            "game_timer": Counter(0)
+        }
+
     def update(self, img) -> int:
-        if self.rendered_for_first_time:
-            self.start_time = time.time()
-            self.rendered_for_first_time = False
         current_time = time.time()
 
         if self.total_enemy_power < playerStats.max_enemy_power:

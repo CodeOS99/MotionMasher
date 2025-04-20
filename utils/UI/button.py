@@ -1,7 +1,6 @@
 import math
 import cv2 as cv
 from globals import hand_utils
-import numpy as np
 
 class Button:
     def __init__(self, x, y, w, h, col, text=""):

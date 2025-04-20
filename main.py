@@ -1,14 +1,11 @@
 import cv2 as cv
 
-from scenes.FightOrTrainMenuScene import FightOrTrainMenuScene
 from scenes.ShopScene import ShopScene
 from scenes.main_scene import MainScene
 from scenes.FightOrTrainMenuScene import FightOrTrainMenuScene
 from scenes.FightScene import FightScene
 from scenes.TrainScene import TrainScene
-from utils.UI.button import Button
-from utils.colours import *
-from globals import hand_utils, width, height
+from globals import width, height
 
 cap = cv.VideoCapture(0)
 cap.set(cv.CAP_PROP_FRAME_WIDTH, width)

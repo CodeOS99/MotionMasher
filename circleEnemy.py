@@ -3,7 +3,7 @@ import time
 import cv2 as cv
 
 import playerStats
-from globals import hand_utils, mpHands
+from globals import hand_utils
 
 
 class CircleEnemy:

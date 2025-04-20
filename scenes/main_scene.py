@@ -15,9 +15,7 @@ class MainScene:
         self.quitBtn: Button = Button(width // 2, height // 2 + 90, 200, 100, red, "QUIT")
 
         self.BUTTONS = (self.startBtn, self.quitBtn)
-
         self.init_time = time.time()
-
         self.init_timer_lim = 1
 
     def draw(self, img) -> None:
@@ -44,7 +42,10 @@ class MainScene:
                        (width // 2 - 150, height // 2),
                        cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
-    def update(self, img) -> int:
+    def re_init(self):
+        self.init_time = time.time()
+
+    def update(self, img, rendered_for_first_time) -> int:
         imgRGB = cv.cvtColor(img, cv.COLOR_BGR2RGB)
         buffer_active = time.time() - self.init_time < self.init_timer_lim
 

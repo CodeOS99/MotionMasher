@@ -26,3 +26,12 @@ The training zone is there to help you train, and also gives a small boost to yo
 Be very careful in the shop! There is a 0.5s cooldown on purchasing anythign from the shop, and you also need to very carefully and slowly close and open your hands in order to confirm your purchase.
 
 Click on any of the 'Quit' buttons on the screen, or press q to close the game.
+
+# How to run?
+
+In the releases tab, download the release for your platform, locate main.exe, 
+
+![image](https://github.com/user-attachments/assets/0f4f41a9-8073-4633-8185-f8f531a5fef7)
+
+and run it. It may take a few seconds for the first time you run it. That's fine.
+

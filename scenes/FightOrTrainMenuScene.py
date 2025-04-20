@@ -6,7 +6,6 @@ import utils.sceneValues
 from utils.UI.button import Button
 from utils.colours import *
 from globals import hand_utils, width, height
-from utils.counter import Counter
 
 
 class FightOrTrainMenuScene:
@@ -20,22 +19,20 @@ class FightOrTrainMenuScene:
 
         self.BUTTONS = (self.fight_option_btn, self.back_option_btn, self.train_option_btn, self.shop_option_btn, self.quit_btn)
         self.init_time = time.time()
-        self.rendered_for_first_time = True
 
         self.init_timer_lim = 1
 
+    def re_init(self):
+        self.init_time = time.time()
+
     def update(self, img) -> int:
-        if self.rendered_for_first_time:
-            self.init_time = time.time()
-            self.rendered_for_first_time = False
-            return utils.sceneValues.FOTM_Scene
         imgRGB = cv.cvtColor(img, cv.COLOR_BGR2RGB)
         buffer_active = time.time() - self.init_time < self.init_timer_lim
 
         # Only update buttons if buffer time has passed
         if not buffer_active:
             for btn in self.BUTTONS:
-                btn.update(img)
+                btn.update(imgRGB)
 
             if self.back_option_btn.clicked:
                 return utils.sceneValues.main_scene

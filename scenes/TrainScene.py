@@ -86,6 +86,20 @@ class TrainScene:
         cv.putText(img, "Hit the targets with your hand!", (50, height - 50),
                    cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
 
+    def re_init(self):
+        # Reset game stats
+        self.targets_hit = 0
+        self.accuracy = 0
+        self.total_attempts = 0
+
+        # Reset target management
+        self.targets = []
+        self.hit_cooldown = False
+
+        # Reset timers
+        self.target_spawn_timer.reset(time.time())
+        self.cooldown_timer.reset(time.time())
+
     def update(self, img):
         # Process image for hand tracking
         imgRGB = cv.cvtColor(img, cv.COLOR_BGR2RGB)

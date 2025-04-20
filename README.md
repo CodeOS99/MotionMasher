@@ -35,3 +35,4 @@ In the releases tab, download the release for your platform, locate main.exe,
 
 and run it. It may take a few seconds for the first time you run it. That's fine.
 
+[Video Demo](https://youtu.be/Cik-xxJVli4)(The game looks much worse in this one D:)

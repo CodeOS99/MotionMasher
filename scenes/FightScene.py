@@ -81,14 +81,14 @@ class FightScene:
             for counter in self.counters.values():
                 counter.update(current_time)
 
-            # Calculate current difficulty level based on time survived
+            # Calculate current difficulty level based on time survived - no upper limit
             self.difficulty_level = 1 + int(self.game_duration / 15)  # Increase level every 15 seconds
 
-            # Calculate spawn interval based on difficulty
-            spawn_interval = max(
-                self.base_spawn_time - (self.difficulty_level * 0.07),
-                self.min_spawn_time
-            )
+            # Calculate spawn interval based on difficulty - removed min_spawn_time limit
+            spawn_interval = self.base_spawn_time - (self.difficulty_level * 0.07)
+            # Prevent negative or zero spawn intervals
+            if spawn_interval <= 0.05:
+                spawn_interval = 0.05
 
             # Spawn enemies at adjusted rate
             if self.counters["circle_spawner"].has_passed(spawn_interval):
@@ -122,15 +122,9 @@ class FightScene:
         x = np.random.randint(100, width - 100)
         y = np.random.randint(100, height - 100)
 
-        # Scale health based on difficulty level
-        min_health = min(
-            self.base_health[0] + int(self.difficulty_level * 0.2),
-            self.max_health[0]
-        )
-        max_health = min(
-            self.base_health[1] + int(self.difficulty_level * 0.5),
-            self.max_health[1]
-        )
+        # Scale health based on difficulty level - removed max_health cap
+        min_health = self.base_health[0] + int(self.difficulty_level * 0.2)
+        max_health = self.base_health[1] + int(self.difficulty_level * 0.5)
 
         health = np.random.randint(min_health, max_health + 1)
         colour = (np.random.randint(0, 255), np.random.randint(0, 255), np.random.randint(0, 255))

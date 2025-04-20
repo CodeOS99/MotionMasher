@@ -45,7 +45,7 @@ class MainScene:
     def re_init(self):
         self.init_time = time.time()
 
-    def update(self, img, rendered_for_first_time) -> int:
+    def update(self, img) -> int:
         imgRGB = cv.cvtColor(img, cv.COLOR_BGR2RGB)
         buffer_active = time.time() - self.init_time < self.init_timer_lim
 

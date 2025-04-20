@@ -72,6 +72,9 @@ class ShopScene:
         imgRGB = cv.cvtColor(img, cv.COLOR_BGR2RGB)
         self.prev_clicked = hand_utils.open_or_closed(imgRGB, img)
 
+    def re_init(self):
+        pass
+
     def update(self, img):
         for button in self.buttons:
             button.update(img)

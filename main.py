@@ -1,5 +1,6 @@
 import cv2 as cv
 
+from save_load import load_save_file
 from scenes.ShopScene import ShopScene
 from scenes.main_scene import MainScene
 from scenes.FightOrTrainMenuScene import FightOrTrainMenuScene
@@ -15,6 +16,8 @@ cap.set(cv.CAP_PROP_FRAME_HEIGHT, height)
 all_scenes = [MainScene(), FightOrTrainMenuScene(), FightScene(), ShopScene(), TrainScene()]
 curr_scene_idx = 0
 p_idx = curr_scene_idx
+
+load_save_file()
 
 while True:
     _, img = cap.read()

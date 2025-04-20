@@ -24,3 +24,5 @@ Circles also contribute to the total enemy power, which may be seen represented 
 The training zone is there to help you train, and also gives a small boost to your stats.
 
 Be very careful in the shop! There is a 0.5s cooldown on purchasing anythign from the shop, and you also need to very carefully and slowly close and open your hands in order to confirm your purchase.
+
+Click on any of the 'Quit' buttons on the screen, or press q to close the game.

@@ -29,7 +29,7 @@ Click on any of the 'Quit' buttons on the screen, or press q to close the game.
 
 # How to run?
 
-In the releases tab, download the release for your platform, locate main.exe, 
+Download the [release](https://github.com/CodeOS99/MotionMasher/releases/tag/v1.0) for your platform, unzip, locate main.exe, 
 
 ![image](https://github.com/user-attachments/assets/0f4f41a9-8073-4633-8185-f8f531a5fef7)
 
